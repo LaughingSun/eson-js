@@ -43,8 +43,9 @@ name                        | definition
 **_ESONString_**            | `"` **_ESONStringCharacters_**? `"`
 **_ESONStringCharacters_**  | **_ESONStringCharacter_** **_ESONStringCharacters_**?
 **_ESONStringCharacter_**   | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
-**_ESONNumber_**            | `-`? _DecimalIntegerLiteral_ *_ESONFraction_*? _ExponentPart_?
+**_ESONNumber_**            | `-`? _DecimalIntegerLiteral_ *_ESONFraction_*? _ESONExponentPart_?
 **_ESONFraction_**          | `.` _DecimalDigits_
+**_ESONExponentPart_**      | ( `E` | `e` ) ( `+` | `-` )? _DecimalIntegerLiteral_ 
 **_ESONNullLiteral_**       | _NullLiteral_
 **_ESONBooleanLiteral_**    | _BooleanLiteral_
 
