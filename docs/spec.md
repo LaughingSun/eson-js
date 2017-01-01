@@ -283,7 +283,8 @@ The abstract operation _Quote_(_value_) wraps a String value in double quotes 
         1.  Let _product_ be the concatenation of _product_ and the backslash character.
 
         2.  Let _abbrev_ be the character corresponding to the value of _C_ as follows:
-
+            
+            --- | ---
             backspace       | **"b"**
             formfeed        | **"f"**
             newline         | **"n"**
