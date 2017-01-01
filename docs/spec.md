@@ -1,28 +1,30 @@
-# [15.12](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12)The JSON Object
+# The ESON Object
+adapted from [15.12](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12)
 
-The **JSON** object is a single object that contains two functions, **parse** and **stringify**, that are used to parse and construct JSON texts. The JSON Data Interchange Format is described in RFC 4627 <[http://www.ietf.org/rfc/rfc4627.txt](http://www.ietf.org/rfc/rfc4627.txt)>. The JSON interchange format used in this specification is exactly that described by RFC 4627 with two exceptions:
+The **ESON** is a class that contains two functions, **parse** and **stringify**, that are used to parse and construct JSON texts. There are static versions of these methods that work identically to the instanctialeted methods and offer bvackward compatibility with the JSON implementations.  While the instance methods offer pre-configured option implementation.  The JSON Data Interchange Format is described in RFC 4627 <[http://www.ietf.org/rfc/rfc4627.txt](http://www.ietf.org/rfc/rfc4627.txt)>. The JSON interchange format used in this specification is exactly that described by RFC 4627 with two exceptions:
 
 *   The top level _JSONText_ production of the ECMAScript JSON grammar may consist of any_JSONValue_ rather than being restricted to being a _JSONObject_ or a _JSONArray_ as specified by RFC 4627.
 
 *   Conforming implementations of **JSON.parse** and **JSON.stringify** must support the exact interchange format described in this specification without any deletions or extensions to the format. This differs from RFC 4627 which permits a JSON parser to accept non-JSON forms and extensions.
 
-The value of the [[Prototype]] internal property of the JSON object is the standard built-in Object prototype object ([15.2.4](http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.4)). The value of the [[Class]] internal property of the JSON object is `**"JSON"**`. The value of the [[Extensible]] internal property of the JSON object is set to **true**.
+The value of the [[Prototype]] internal property of the ESON class is the standard built-in Object prototype object ([15.2.4](http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.4)). The value of the [[Class]] internal property of the ESON class is `**"ESON"**`. The value of the [[Extensible]] internal property of the ESON class is set to **true**.
 
-The JSON object does not have a [[Construct]] internal property; it is not possible to use the JSON object as a constructor with the `**new**` operator.
+The ESON class has a [[Construct]] internal property; which makes it possible to use the JSON object to instantiate pre-configured versions of the 2 methods.  Usage is new ESON( options-object ), which can be dropped in replacing either the JSON object or ESON class.
 
-The JSON object does not have a [[Call]] internal property; it is not possible to invoke the JSON object as a function.
+The ESON class has a [[Call]] internal property; that expects **this** to be an instance that inherits from the ESON class.
 
-# [15.12.1](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.1)The JSON Grammar
+# The ESON Grammar is 100% backwards compatible to JSON Grammer (http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.1)
 
-JSON.stringify produces a String that conforms to the following JSON grammar. JSON.parse accepts a String that conforms to the JSON grammar.
+ESON Grammar additonally supports constructors and configurators, as new native-or-custom-class [ '(' [ arguments ] ')' ] and native-or-custom-class.from( eson ), respectively.
+ESON.stringify produces a String that conforms to the following ESON grammar. ESON.parse accepts a String that conforms to the ESON grammar.
 
-# [15.12.1.1](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.1.1)The JSON Lexical Grammar
+# The ESON Lexical Grammar
 
-JSON is similar to ECMAScript source text in that it consists of a sequence of characters conforming to the rules of _SourceCharacter_. The JSON Lexical Grammar defines the tokens that make up a JSON text similar to the manner that the ECMAScript lexical grammar defines the tokens of an ECMAScript source text. The JSON Lexical grammar only recognises the white space character specified by the production_JSONWhiteSpace_. The JSON lexical grammar shares some productions with the ECMAScript lexical grammar. All nonterminal symbols of the grammar that do not begin with the characters “JSON” are defined by productions of the ECMAScript lexical grammar.
+ESON is similar to ECMAScript source text in that it consists of a sequence of characters conforming to the rules of _SourceCharacter_. The ESON Lexical Grammar defines the tokens that make up a JSON text similar to the manner that the ECMAScript lexical grammar defines the tokens of an ECMAScript source text. The JSON Lexical grammar only recognises the white space character specified by the production _ESONWhiteSpace_. The ESON lexical grammar shares some productions with the ECMAScript lexical grammar. All nonterminal symbols of the grammar that do not begin with the characters “ESON” are defined by productions of the ECMAScript lexical grammar.
 
 ## Syntax
 
-_JSONWhiteSpace_ **::**
+_ESONWhiteSpace_ **::**
 
 <TAB>  
 <CR>  
