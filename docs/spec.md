@@ -24,19 +24,23 @@ ESON is similar to ECMAScript source text in that it consists of a sequence of c
 
 ## Syntax
 
-hmmm
-
-name | definition
----- |:----------
-**_ESONWhiteSpace_**     | `/[\x20\t\r\n]*/`
-**_ESONWord_**         | /[\w$]+/
-**_ESONString_**         | `"` **_ESONStringCharacters_**? `"`
+name                        | definition
+--------------------------- |:----------
+**_ESONWhiteSpace_**        | `/[\x20\t\r\n]*/`
+**_ESONConstruct_**         | **_ESONConstructWord_** **_ESONClassName_** **_ESONArguments_**?
+**_ESONConstructWord_**     | `new`
+**_ESONClassName_**         | /[\w$]+/
+**_ESONArguments_**         | `(` **_ESONArgumentList_**? `)`
+**_ESONArgumentList_**      | _ESONValue_ ( `,` **_ESONArgumentList_** )?
+**_ESONConfigure_**         | **_ESONClassName_** `.` **_ESONConfigureWord_** **_ESONArgumentList_**?
+**_ESONConfigureWord_**     | `configure`
+**_ESONString_**            | `"` **_ESONStringCharacters_**? `"`
 **_ESONStringCharacters_**  | **_ESONStringCharacter_** **_ESONStringCharacters_**?
-**_ESONStringCharacter_**  | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
-**_ESONNumber_**         | `-`? _DecimalIntegerLiteral_ *_ESONFraction_*? _ExponentPart_?
-**_ESONFraction_**  | `.` _DecimalDigits_
-**_ESONNullLiteral_**   | _NullLiteral_
-**_ESONBooleanLiteral_** | _BooleanLiteral_
+**_ESONStringCharacter_**   | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
+**_ESONNumber_**            | `-`? _DecimalIntegerLiteral_ *_ESONFraction_*? _ExponentPart_?
+**_ESONFraction_**          | `.` _DecimalDigits_
+**_ESONNullLiteral_**       | _NullLiteral_
+**_ESONBooleanLiteral_**    | _BooleanLiteral_
 
 
 # The ESON Syntactic Grammar
@@ -45,13 +49,13 @@ The ESON Syntactic Grammar defines a valid ESON text in terms of tokens defined 
 
 ## Syntax
 
-_ESONText_ **:**
+name | definition
+---- |:----------
+**_ESONText_** |
 
-_ESONValue_
+**_ESONValue_** | 
 
-_ESONValue_ **:**
-
-_ESONNullLiteral_
+**_ESONValue_** `:` _ESONNullLiteral_
 
 _ESONBooleanLiteral_
 
