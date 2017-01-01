@@ -96,7 +96,7 @@ The optional _reviver_ parameter is a function that takes two to 3 parameters,
 
     1.  Return _unfiltered_.
 
-The abstract operation Walk is a recursive abstract operation that takes two parameters: a <var>holder</var> object and the String <var>name</var> of a property in that object. Walk uses the value of <var>reviver</var> that was originally passed to the above parse function.
+The abstract operation Walk is a recursive abstract operation that takes two parameters: a *holder* object and the String *name* of a property in that object. Walk uses the value of *reviver* that was originally passed to the above parse function.
 
 1.  Let _val_ be the result of calling the [[Get]] internal method of _holder_ with argument _name_.
 
@@ -146,7 +146,7 @@ NOTEIn the case where there are duplicate name Strings within an object, lexical
 
 # stringify ( value [ , replacer [ , space ] ] )
 
-The `**stringify**` function returns a String in JSON format representing an ECMAScript value. It can take three parameters. The first parameter is required. The <var>value</var> parameter is an ECMAScript value, which is usually an object or array, although it can also be a String, Boolean, Number or **null**. The optional<var>replacer</var> parameter is either a function that alters the way objects and arrays are stringified, or an array of Strings and Numbers that acts as a white list for selecting the object properties that will be stringified. The optional <var>space</var> parameter is a String or Number that allows the result to have white space injected into it to improve human readability.
+The `**stringify**` function returns a String in JSON format representing an ECMAScript value. It can take three parameters. The first parameter is required. The *value* parameter is an ECMAScript value, which is usually an object or array, although it can also be a String, Boolean, Number or **null**. The optional *replacer* parameter is either a function that alters the way objects and arrays are stringified, or an array of Strings and Numbers that acts as a white list for selecting the object properties that will be stringified. The optional *space* parameter is a String or Number that allows the result to have white space injected into it to improve human readability.
 
 These are the steps in stringifying an object:
 
@@ -212,7 +212,7 @@ These are the steps in stringifying an object:
 
 11.  Return the result of calling the abstract operation _Str_ with the empty String and _wrapper_.
 
-The abstract operation _Str_(_key_, _holder_) has access to _ReplacerFunction_ from the invocation of the`**stringify**` method. Its algorithm is as follows:
+The abstract operation _Str_(_key_, _holder_, _raw_ ) has access to _ReplacerFunction_ from the invocation of the`**stringify**` method. Its algorithm is as follows:
 
 1.  Let _value_ be the result of calling the [[Get]] internal method of _holder_ with argument _key_.
 
@@ -252,7 +252,7 @@ The abstract operation _Str_(_key_, _holder_) has access to _ReplacerFunctio
 
 9.  If [Type](http://www.ecma-international.org/ecma-262/5.1/#sec-8)(_value_) is Number
 
-    1.  If _value_ is finite then return [ToString](http://www.ecma-international.org/ecma-262/5.1/#sec-9.8)(_value_).
+    1.  If _value_ is finite then return #toString.
 
     2.  Else, return `**"null"**`.
 
@@ -312,7 +312,7 @@ The abstract operation _Quote_(_value_) wraps a String value in double quotes 
 
 4.  Return _product_.
 
-The abstract operation _JO_(_value_) serializes an object. It has access to the <var>stack</var>, <var>indent</var>, <var>gap</var>, _PropertyList_,_ReplacerFunction_, and <var>space</var> of the invocation of the stringify method.
+The abstract operation _JO_(_value_) serializes an object. It has access to the *stack*, *indent*, *gap*, _PropertyList_,_ReplacerFunction_, and *space* of the invocation of the stringify method.
 
 1.  If _stack_ contains _value_ then throw a **TypeError** exception because the structure is cyclical.
 
@@ -376,7 +376,7 @@ The abstract operation _JO_(_value_) serializes an object. It has access to th
 
 13.  Return _final_.
 
-The abstract operation _JA_(_value_) serializes an array. It has access to the <var>stack</var>, <var>indent</var>, <var>gap</var>, and <var>space</var> of the invocation of the stringify method. The representation of arrays includes only the elements between zero and `**array.length**` – 1 inclusive. Named properties are excluded from the stringification. An array is stringified as an open left bracket, elements separated by comma, and a closing right bracket.
+The abstract operation _JA_(_value_) serializes an array. It has access to the *stack*, *indent*, *gap*, and *space* of the invocation of the stringify method. The representation of arrays includes only the elements between zero and `**array.length**` – 1 inclusive. Named properties are excluded from the stringification. An array is stringified as an open left bracket, elements separated by comma, and a closing right bracket.
 
 1.  If _stack_ contains _value_ then throw a **TypeError** exception because the structure is cyclical.
 
@@ -394,7 +394,7 @@ The abstract operation _JA_(_value_) serializes an array. It has access to the
 
 8.  Repeat while _index_ < _len_
 
-    1.  Let _strP_ be the result of calling the abstract operation _Str_ with arguments [ToString](http://www.ecma-international.org/ecma-262/5.1/#sec-9.8)(_index_) and_value_.
+    1.  Let _strP_ be the result of calling the abstract operation _Str_ with arguments #toString(_index_) and_value_.
 
     2.  If _strP_ is **undefined**
 
@@ -432,13 +432,13 @@ The abstract operation _JA_(_value_) serializes an array. It has access to the
 
 13.  Return _final_.
 
-NOTE 1JSON structures are allowed to be nested to any depth, but they must be acyclic. If <var>value</var> is or contains a cyclic structure, then the stringify function must throw a **TypeError**exception. This is an example of a value that cannot be stringified:
+NOTE 1 ESON structures are allowed to be nested to any depth, but they must be acyclic. If *value* is or contains a cyclic structure, then the stringify function must throw a **TypeError**exception. This is an example of a value that cannot be stringified:
 
 <pre style="margin-bottom: 0.5cm">**a = [];**
 **a[0] = a;**
-**my_text = JSON.stringify(a); // This must throw an TypeError.**</pre>
+**my_text = ESON.stringify(a); // This must throw an TypeError.**</pre>
 
-NOTE 2Symbolic primitive values are rendered as follows:
+NOTE 2 Symbolic primitive values are rendered as follows:
 
 *   The **null** value is rendered in JSON text as the String null.
 
@@ -448,15 +448,15 @@ NOTE 2Symbolic primitive values are rendered as follows:
 
 *   The **false** value is rendered in JSON text as the String false.
 
-NOTE 3String values are wrapped in double quotes. The characters `**"**` and `**\**` are escaped with `**\**`prefixes. Control characters are replaced with escape sequences `**\u**`HHHH, or with the shorter forms, `**\b**` (backspace), `**\f**` (formfeed), `**\n**` (newline), `**\r**` (carriage return), `**\t**` (tab).
+NOTE 3 String values are wrapped in double quotes. The characters `**"**` and `**\**` are escaped with `**\**`prefixes. Control characters are replaced with escape sequences `**\u**`HHHH, or with the shorter forms, `**\b**` (backspace), `**\f**` (formfeed), `**\n**` (newline), `**\r**` (carriage return), `**\t**` (tab).
 
-NOTE 4Finite numbers are stringified as if by calling [ToString](http://www.ecma-international.org/ecma-262/5.1/#sec-9.8)**(**_number_**)**. **NaN** and Infinity regardless of sign are represented as the String `**null**`.
+NOTE 4 Finite numbers are stringified as if by calling #toString)**(**_number_**)**. **NaN** and Infinity regardless of sign are represented as the String `**null**`.
 
 NOTE 5Values that do not have a JSON representation (such as **undefined** and functions) do not produce a String. Instead they produce the undefined value. In arrays these values are represented as the String `**null**`. In objects an unrepresentable value causes the property to be excluded from stringification.
 
 NOTE 6An object is rendered as an opening left brace followed by zero or more properties, separated with commas, closed with a right brace. A property is a quoted String representing the key or property name, a colon, and then the stringified property value. An array is rendered as an opening left bracket followed by zero or more values, separated with commas, closed with a right bracket.
 
-# [16](http://www.ecma-international.org/ecma-262/5.1/#sec-16)Errors
+# Errors
 
 An implementation must report most errors at the time the relevant ECMAScript language construct is evaluated. An _early error_ is an error that can be detected and reported prior to the evaluation of any construct in the _Program_ containing the error. An implementation must report early errors in a _Program_prior to the first evaluation of that _Program_. Early errors in **eval** code are reported at the time `**eval**` is called but prior to evaluation of any construct within the **eval** code. All errors that are not early errors are runtime errors.
 
@@ -488,4 +488,4 @@ An implementation shall report all errors as specified, except for the following
 
 *   An implementation may provide additional types, values, objects, properties, and functions beyond those described in this specification. This may cause constructs (such as looking up a variable in the global scope) to have implementation-defined behaviour instead of throwing an error (such as**ReferenceError**).
 
-*   An implementation may define behaviour other than throwing **RangeError** for `**toFixed**`,`**toExponential**`, and `**toPrecision**` when the <var>fractionDigits</var> or <var>precision</var> argument is outside the specified range.
+*   An implementation may define behaviour other than throwing **RangeError** for `**toFixed**`,`**toExponential**`, and `**toPrecision**` when the *fractionDigits* or *precision* argument is outside the specified range.
