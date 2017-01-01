@@ -26,8 +26,8 @@ ESON is similar to ECMAScript source text in that it consists of a sequence of c
 
 hmmm
 
-name |  | definition
-==== | == | ==========
+name |     | definition
+---- | --- | :----------
 **_ESONWhiteSpace_**    | :: | **TAB** \| **CR** \| **LF** \| **SP**
 **_JSONString_**        | :: | `"` **_JSONStringCharacters_**? `"`
 **_JSONStringCharacters_** | :: | **_JSONStringCharacter_** **_JSONStringCharacters_**?
