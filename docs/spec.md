@@ -26,80 +26,72 @@ ESON is similar to ECMAScript source text in that it consists of a sequence of c
 
 hmmm
 
-name |     | definition
----- | --- | :----------
-**_ESONWhiteSpace_**    | :: | **TAB** \| **CR** \| **LF** \| **SP**
-**_JSONString_**        | :: | `"` **_JSONStringCharacters_**? `"`
-**_JSONStringCharacters_** | :: | **_JSONStringCharacter_** **_JSONStringCharacters_**?
-**_JSONStringCharacter_** | :: | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
-**_JSONNumber_**        | :: | `-`? **_DecimalIntegerLiteral_** **_JSONFraction_**? **_ExponentPart_**?
-**_JSONFraction_** | ::| 
+name | definition
+---- |:----------
+**_ESONWhiteSpace_**     | `/[\x20\t\r\n]*/`
+**_ESONString_**         | `"` **_ESONStringCharacters_**? `"`
+**_ESONStringCharacters_**  | **_ESONStringCharacter_** **_ESONStringCharacters_**?
+**_ESONStringCharacter_**  | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
+**_ESONNumber_**         | `-`? _DecimalIntegerLiteral_ _ESONFraction_? _ExponentPart_?
+**_ESONFraction_**  | `.` _DecimalDigits_
+**_ESONNullLiteral_**   | _NullLiteral_
+**_ESONBooleanLiteral_** | _BooleanLiteral_
 
-`**.**` _DecimalDigits_
+# The ESON Syntactic Grammar
 
-_JSONNullLiteral_ **::**
-
-_NullLiteral_
-
-_JSONBooleanLiteral_ **::**
-
-_BooleanLiteral_
-
-# [15.12.1.2](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.1.2)The JSON Syntactic Grammar
-
-The JSON Syntactic Grammar defines a valid JSON text in terms of tokens defined by the JSON lexical grammar. The goal symbol of the grammar is _JSONText_.
+The ESON Syntactic Grammar defines a valid ESON text in terms of tokens defined by the ESON lexical grammar. The goal symbol of the grammar is _ESONText_.
 
 ## Syntax
 
-_JSONText_ **:**
+_ESONText_ **:**
 
-_JSONValue_
+_ESONValue_
 
-_JSONValue_ **:**
+_ESONValue_ **:**
 
-_JSONNullLiteral_
+_ESONNullLiteral_
 
-_JSONBooleanLiteral_
+_ESONBooleanLiteral_
 
-_JSONObject_
+_ESONObject_
 
-_JSONArray_
+_ESONArray_
 
-_JSONString_
+_ESONString_
 
-_JSONNumber_
+_ESONNumber_
 
-_JSONObject_ **:**
+_ESONObject_ **:**
 
 `**{**` `**}**`
 
-`**{**` _JSONMemberList_ `**}**`
+`**{**` _ESONMemberList_ `**}**`
 
-_JSONMember_ **:**
+_ESONMember_ **:**
 
-_JSONString_ `**:**` _JSONValue_
+_ESONString_ `**:**` _ESONValue_
 
-_JSONMemberList_ **:**
+_ESONMemberList_ **:**
 
-_JSONMember_
+_ESONMember_
 
-_JSONMemberList_ `**,**` _JSONMember_
+_ESONMemberList_ `**,**` _ESONMember_
 
-_JSONArray_ **:**
+_ESONArray_ **:**
 
 `**[**` `**]**`
 
-`**[**` _JSONElementList_ `**]**`
+`**[**` _ESONElementList_ `**]**`
 
-_JSONElementList_ **:**
+_ESONElementList_ **:**
 
-_JSONValue_
+_ESONValue_
 
-_JSONElementList_ `**,**` _JSONValue_
+_ESONElementList_ `**,**` _ESONValue_
 
 # [15.12.2](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.2)parse ( text [ , reviver ] )
 
-The `**parse**` function parses a JSON text (a JSON-formatted String) and produces an ECMAScript value. The JSON format is a restricted form of ECMAScript literal. JSON objects are realized as ECMAScript objects. JSON arrays are realized as ECMAScript arrays. JSON strings, numbers, booleans, and null are realized as ECMAScript Strings, Numbers, Booleans, and **null**. JSON uses a more limited set of white space characters than _WhiteSpace_ and allows Unicode code points U+2028 and U+2029 to directly appear in _JSONString_ literals without using an escape sequence. The process of parsing is similar to [11.1.4](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.4) and[11.1.5](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5) as constrained by the JSON grammar.
+The `**parse**` function parses a ESON text (a JSON-formatted String) and produces an ECMAScript value. The JSON format is a restricted form of ECMAScript literal. JSON objects are realized as ECMAScript objects. JSON arrays are realized as ECMAScript arrays. JSON strings, numbers, booleans, and null are realized as ECMAScript Strings, Numbers, Booleans, and **null**. JSON uses a more limited set of white space characters than _WhiteSpace_ and allows Unicode code points U+2028 and U+2029 to directly appear in _JSONString_ literals without using an escape sequence. The process of parsing is similar to [11.1.4](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.4) and[11.1.5](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5) as constrained by the JSON grammar.
 
 The optional _reviver_ parameter is a function that takes two parameters, (_key_ and _value_). It can filter and transform the results. It is called with each of the _key_/_value_ pairs produced by the parse, and its return value is used instead of the original value. If it returns what it received, the structure is not modified. If it returns **undefined** then the property is deleted from the result.
 
