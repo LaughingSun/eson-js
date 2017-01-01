@@ -15,8 +15,9 @@ The ESON class has a [[Call]] internal property; that expects **this** to be an 
 
 # The ESON Grammar is 100% backwards compatible to JSON Grammer (http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.1)
 
-ESON Grammar additonally supports constructors and configurators, as new native-or-custom-class [ '(' [ arguments ] ')' ] and native-or-custom-class.from( eson ), respectively.
+ESON Grammar additonally supports constructors and configurators, as new native-or-custom-class [ '(' [ arguments ] ')' ] and native-or-custom-class.from( eson ), respectively.**ESON** ( `,` .**ESON** )
 ESON.stringify produces a String that conforms to the following ESON grammar. ESON.parse accepts a String that conforms to the ESON grammar.
+
 
 # The ESON Lexical Grammar
 
@@ -26,14 +27,19 @@ ESON is similar to ECMAScript source text in that it consists of a sequence of c
 
 name                        | definition
 --------------------------- |:----------
-**_ESONWhiteSpace_**        | `/[\x20\t\r\n]*/`
-**_ESONConstruct_**         | **_ESONConstructWord_** **_ESONClassName_** **_ESONArguments_**?
+**_ESONWhiteSpace_**        | `/[\x20\f\t\r\n]*/`
 **_ESONConstructWord_**     | `new`
 **_ESONClassName_**         | /[\w$]+/
-**_ESONArguments_**         | `(` **_ESONArgumentList_**? `)`
-**_ESONArgumentList_**      | _ESONValue_ ( `,` **_ESONArgumentList_** )?
-**_ESONConfigure_**         | **_ESONClassName_** `.` **_ESONConfigureWord_** **_ESONArgumentList_**?
 **_ESONConfigureWord_**     | `configure`
+**_ESONBeginArguments_**    | `(`
+**_ESONEndArguments_**      | `)`
+**_ESONBeginMembers_**      | `{`
+**_ESONEndMembers_**        | `}`
+**_ESONBeginElements_**     | `[`
+**_ESONEndElements_**       | `]`
+**_ESONSeperator_**         | `,`
+**_ESONPairer_**            | `:`
+**_ESONAccessor_**          | `.`
 **_ESONString_**            | `"` **_ESONStringCharacters_**? `"`
 **_ESONStringCharacters_**  | **_ESONStringCharacter_** **_ESONStringCharacters_**?
 **_ESONStringCharacter_**   | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
@@ -49,53 +55,24 @@ The ESON Syntactic Grammar defines a valid ESON text in terms of tokens defined 
 
 ## Syntax
 
-name | definition
----- |:----------
-**_ESONText_** |
+name                        | definition
+--------------------------- |:----------
+**_ESONText_**              | **_ESONValue_**
+**_ESONValue_**             | **_ESONObject_** or **_ESONConstruct_** or **_ESONConfigure_** or **_ESONArray_**
+                            | or _ESONString_ or _ESONNumber_ or _ESONNullLiteral_ or _ESONBooleanLiteral_ 
+**_ESONObject_**            | _ESONBeginMembers_ **_ESONMemberList_**? _ESONEndMembers_
+**_ESONMemberList_**        | **_ESONMember_** ( _ESONSeperator_ **_ESONMemberList_** )
+**_ESONMember_**            | _ESONString_ _ESONPairer_ _ESONValue_
+**_ESONArray_**             | _ESONBeginElements_ **_ESONElementList_**? _ESONBEndElements_
+**_ESONElementList_**       | **_ESONElement_** ( _ESONSeperator_ **_ESONElementList_** )
+**_ESONMember_**            | _ESONString_ _ESONPairer_ _ESONValue_
+**_ESONConstruct_**         | _ESONConstructWord_ _ESONClassName_ **_ESONArguments_**?
+**_ESONConfigure_**         | _ESONClassName_ _ESONAccessor_ _ESONConfigureWord_ **_ESONArgumentList_**?
+**_ESONArguments_**         | _ESONBeginArguments_ **_ESONArgumentList_**? _ESONEndArguments_
+**_ESONArgumentList_**      | _ESONValue_ ( _ESONSeperator_ **_ESONArgumentList_** )?
 
-**_ESONValue_** | 
 
-**_ESONValue_** `:` _ESONNullLiteral_
-
-_ESONBooleanLiteral_
-
-_ESONObject_
-
-_ESONArray_
-
-_ESONString_
-
-_ESONNumber_
-
-_ESONObject_ **:**
-
-`**{**` `**}**`
-
-`**{**` _ESONMemberList_ `**}**`
-
-_ESONMember_ **:**
-
-_ESONString_ `**:**` _ESONValue_
-
-_ESONMemberList_ **:**
-
-_ESONMember_
-
-_ESONMemberList_ `**,**` _ESONMember_
-
-_ESONArray_ **:**
-
-`**[**` `**]**`
-
-`**[**` _ESONElementList_ `**]**`
-
-_ESONElementList_ **:**
-
-_ESONValue_
-
-_ESONElementList_ `**,**` _ESONValue_
-
-# [15.12.2](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.2)parse ( text [ , reviver ] )
+# parse ( text [ , reviver ] )
 
 The `**parse**` function parses a ESON text (a JSON-formatted String) and produces an ECMAScript value. The JSON format is a restricted form of ECMAScript literal. JSON objects are realized as ECMAScript objects. JSON arrays are realized as ECMAScript arrays. JSON strings, numbers, booleans, and null are realized as ECMAScript Strings, Numbers, Booleans, and **null**. JSON uses a more limited set of white space characters than _WhiteSpace_ and allows Unicode code points U+2028 and U+2029 to directly appear in _JSONString_ literals without using an escape sequence. The process of parsing is similar to [11.1.4](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.4) and[11.1.5](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5) as constrained by the JSON grammar.
 
@@ -167,7 +144,7 @@ It is not permitted for a conforming implementation of `**JSON.parse**` to ext
 
 NOTEIn the case where there are duplicate name Strings within an object, lexically preceding values for the same key shall be overwritten.
 
-# [15.12.3](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.3)stringify ( value [ , replacer [ , space ] ] )
+# stringify ( value [ , replacer [ , space ] ] )
 
 The `**stringify**` function returns a String in JSON format representing an ECMAScript value. It can take three parameters. The first parameter is required. The <var>value</var> parameter is an ECMAScript value, which is usually an object or array, although it can also be a String, Boolean, Number or **null**. The optional<var>replacer</var> parameter is either a function that alters the way objects and arrays are stringified, or an array of Strings and Numbers that acts as a white list for selecting the object properties that will be stringified. The optional <var>space</var> parameter is a String or Number that allows the result to have white space injected into it to improve human readability.
 
