@@ -29,13 +29,15 @@ hmmm
 name | definition
 ---- |:----------
 **_ESONWhiteSpace_**     | `/[\x20\t\r\n]*/`
+**_ESONWord_**         | /[\w$]+/
 **_ESONString_**         | `"` **_ESONStringCharacters_**? `"`
 **_ESONStringCharacters_**  | **_ESONStringCharacter_** **_ESONStringCharacters_**?
 **_ESONStringCharacter_**  | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
-**_ESONNumber_**         | `-`? _DecimalIntegerLiteral_ _ESONFraction_? _ExponentPart_?
+**_ESONNumber_**         | `-`? _DecimalIntegerLiteral_ *_ESONFraction_*? _ExponentPart_?
 **_ESONFraction_**  | `.` _DecimalDigits_
 **_ESONNullLiteral_**   | _NullLiteral_
 **_ESONBooleanLiteral_** | _BooleanLiteral_
+
 
 # The ESON Syntactic Grammar
 
