@@ -24,42 +24,12 @@ ESON is similar to ECMAScript source text in that it consists of a sequence of c
 
 ## Syntax
 
-_ESONWhiteSpace_ **::**
-
-<TAB>  
-<CR>  
-<LF>  
-<SP>
-
-_JSONString_ **::**
-
-`**"**` _JSONStringCharacters_opt `**"**`
-
-_JSONStringCharacters_ **::**
-
-_JSONStringCharacter_ _JSONStringCharacters_opt
-
-_JSONStringCharacter_ **::**
-
-SourceCharacter **but not one of** `**"**` **or** **\****or** U+0000 **through** U+001F
-
-`**\**` JSONEscapeSequence
-
-_JSONEscapeSequence_ **::**
-
-_JSONEscapeCharacter_
-
-_UnicodeEscapeSequence_
-
-_JSONEscapeCharacter_ **::** **one of**
-
-`**"**` `**/**` `**\**` `**b**` `**f**` `**n**` `**r**` `**t**`
-
-_JSONNumber_ **::**
-
-`**-**`opt _DecimalIntegerLiteral_ _JSONFraction_opt _ExponentPart_opt
-
-_JSONFraction_ **::**
+**_ESONWhiteSpace_**    | :: | **TAB** \| **CR** \| **LF** \| **SP**
+**_JSONString_**        | :: | `"` **_JSONStringCharacters_**? `"`
+**_JSONStringCharacters_** | :: | **_JSONStringCharacter_** **_JSONStringCharacters_**?
+**_JSONStringCharacter_** | :: | `/[^"\\\x00-0x1F]\|\\(["\/\\bfnrt]\|u[0-9A-Fa-f]{4}|u\{[0-9A-Fa-f]\})/`
+**_JSONNumber_**        | :: | `-`? **_DecimalIntegerLiteral_** **_JSONFraction_**? **_ExponentPart_**?
+**_JSONFraction_** | ::| 
 
 `**.**` _DecimalDigits_
 
