@@ -5,7 +5,7 @@ The **ESON** is a class that contains two functions, **parse** and **string
 
 *   The top level _JSONText_ production of the ECMAScript JSON grammar may consist of any_JSONValue_ rather than being restricted to being a _JSONObject_ or a _JSONArray_ as specified by RFC 4627.
 
-*   Conforming implementations of **JSON.parse** and **JSON.stringify** must support the exact interchange format described in this specification without any deletions or extensions to the format. This differs from RFC 4627 which permits a JSON parser to accept non-JSON forms and extensions.
+*   Conforming implementations of **JSON.parse** and **JSON.stringify** must support the exact interchange format described in this specification without any deletions or extensions to the format. This differs from RFC 4627 which permits aa ESON parser to accept non-JSON forms and extensions.
 
 The value of the [[Prototype]] internal property of the ESON class is the standard built-in Object prototype object ([15.2.4](http://www.ecma-international.org/ecma-262/5.1/#sec-15.2.4)). The value of the [[Class]] internal property of the ESON class is `**"ESON"**`. The value of the [[Extensible]] internal property of the ESON class is set to **true**.
 
@@ -74,15 +74,15 @@ name                        | definition
 
 # parse ( text [ , reviver ] )
 
-The `**parse**` function parses a ESON text (a JSON-formatted String) and produces an ECMAScript value. The JSON format is a restricted form of ECMAScript literal. JSON objects are realized as ECMAScript objects. JSON arrays are realized as ECMAScript arrays. JSON strings, numbers, booleans, and null are realized as ECMAScript Strings, Numbers, Booleans, and **null**. JSON uses a more limited set of white space characters than _WhiteSpace_ and allows Unicode code points U+2028 and U+2029 to directly appear in _JSONString_ literals without using an escape sequence. The process of parsing is similar to [11.1.4](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.4) and[11.1.5](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5) as constrained by the JSON grammar.
+The `**parse**` function parses a ESON text (a JSON-formatted String) and produces an ECMAScript value. The ESON format is a restricted form of ECMAScript literal. ESON objects are realized as ECMAScript objects, constructions or configurators. ESON arrays are realized as ECMAScript arrays. JSON strings, numbers, booleans, and null are realized as ECMAScript Strings, Numbers, Booleans, and **null**. ESON uses a more limited set of white space characters than _WhiteSpace_ and allows Unicode code points U+2028 and U+2029 to directly appear in _JSONString_ literals without using an escape sequence. For parsing, Object constructions and configurations will create an object if the used class is in scope with either a constructor or configurator (static `configure` method respectively.  Likewise for stringify-ing, if there is a constructor or toESON method in the object's prototype, those objects will be stringified using the configurator or constructor as the text.  The process of parsing is similar to [11.1.4](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.4) and[11.1.5](http://www.ecma-international.org/ecma-262/5.1/#sec-11.1.5) as constrained by the JSON grammar.
 
-The optional _reviver_ parameter is a function that takes two parameters, (_key_ and _value_). It can filter and transform the results. It is called with each of the _key_/_value_ pairs produced by the parse, and its return value is used instead of the original value. If it returns what it received, the structure is not modified. If it returns **undefined** then the property is deleted from the result.
+The optional _reviver_ parameter is a function that takes two to 3 parameters, (_key_, _value_, _raw_). It can filter and transform the results.  The additional _raw_ parameter will contain the unparsed text. It is called with each of the _key_ and _value_/_raw_ pairs produced by the parse, and its return value is used instead of the original value. If it returns what it received, the structure is not modified. If it returns **undefined** then the property is deleted from the result.
 
-1.  Let _JText_ be [ToString](http://www.ecma-international.org/ecma-262/5.1/#sec-9.8)(_text_).
+1.  Let _JText_ be #toString(_text_).
 
-2.  Parse _JText_ using the grammars in [15.12.1](http://www.ecma-international.org/ecma-262/5.1/#sec-15.12.1). Throw a **SyntaxError** exception if _JText_ did not conform to the JSON grammar for the goal symbol _JSONText_.
+2.  Parse _JText_ using the ESON Syntactic Grammar. Throw a **SyntaxError** exception if _JText_ did not conform to the ESON grammar for the goal symbol _JSONText_.
 
-3.  Let _unfiltered_ be the result of parsing and evaluating _JText_ as if it was the source text of an ECMAScript _Program_ but using _JSONString_ in place of _StringLiteral_. Note that since _JText_ conforms to the JSON grammar this result will be either a primitive value or an object that is defined by either an _ArrayLiteral_ or an _ObjectLiteral_.
+3.  Let _unfiltered_ be the result of parsing and evaluating _JText_ as if it was the source text of an ECMAScript _Program_ but using _ESONString_ in place of _StringLiteral_. Note that since _JText_ conforms to the JSON grammar this result will be either a primitive value or an object that is defined by either an _ArrayLiteral_ or an _ObjectLiteral_.
 
 4.  If [IsCallable](http://www.ecma-international.org/ecma-262/5.1/#sec-9.11)(_reviver_) is **true**, then
 
@@ -284,93 +284,11 @@ The abstract operation _Quote_(_value_) wraps a String value in double quotes 
 
         2.  Let _abbrev_ be the character corresponding to the value of _C_ as follows:
 
-            <table cellpadding="2" cellspacing="2">
-
-            <tbody>
-
-            <tr>
-
-            <td>
-
-            backspace
-
-            </td>
-
-            <td>
-
-            **"b"**
-
-            </td>
-
-            </tr>
-
-            <tr>
-
-            <td>
-
-            formfeed
-
-            </td>
-
-            <td>
-
-            **"f"**
-
-            </td>
-
-            </tr>
-
-            <tr>
-
-            <td>
-
-            newline
-
-            </td>
-
-            <td>
-
-            **"n"**
-
-            </td>
-
-            </tr>
-
-            <tr>
-
-            <td>
-
-            carriage return
-
-            </td>
-
-            <td>
-
-            **"r"**
-
-            </td>
-
-            </tr>
-
-            <tr>
-
-            <td>
-
-            tab
-
-            </td>
-
-            <td>
-
-            **"t"**
-
-            </td>
-
-            </tr>
-
-            </tbody>
-
-            </table>
+            backspace       | **"b"**
+            formfeed        | **"f"**
+            newline         | **"n"**
+            carriage return | **"r"**
+            tab             | **"t"**
 
         3.  Let _product_ be the concatenation of _product_ and _abbrev_.
 
